@@ -1,30 +1,27 @@
 #include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
     string s;
-    getline(cin, s);
+    cin >> s;
 
-    int n = s.length();
-
-    if (n < 2) {
-        cout << "Invalid String" << endl;
+    if (s.length() < 2) {
+        cout << "Invalid String";
         return 0;
     }
 
-    if (s[n-2] != 'b' || s[n-1] != 'b') {
-        cout << "Invalid String" << endl;
+    if (s[s.length() - 2] != 'b' || s[s.length() - 1] != 'b') {
+        cout << "Invalid String";
         return 0;
     }
 
-    for (int i = 0; i < n-2; i++) {
+    for (int i = 0; i < s.length() - 2; i++) {
         if (s[i] != 'a') {
-            cout << "Invalid String" << endl;
+            cout << "Invalid String";
             return 0;
         }
     }
 
-    cout << "Valid String" << endl;
+    cout << "Valid String";
     return 0;
 }
