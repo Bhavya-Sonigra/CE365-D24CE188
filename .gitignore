@@ -1,2 +1,7 @@
-./main
+# C++ executables
+main
+a.out
 *.exe
+
+# macOS junk
+.DS_Store
