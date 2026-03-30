@@ -10,10 +10,10 @@
 *.exe
 
 # Local binaries from practicals
-practical1
-practical2
-practical3
-prac
+Practical1
+Practical2
+Practical3
+Practical4
 lexer
 
 # Flex/Bison generated sources

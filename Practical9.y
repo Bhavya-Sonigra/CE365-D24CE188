@@ -3,39 +3,34 @@
 #include <stdlib.h>
 
 int yylex(void);
-int yyparse(void);
 void yyerror(const char *s);
 %}
 
-%token I B T E A
-
 %%
 
-S : M
-  | U
-  ;
+S  : 'i' E 't' S S1
+   | 'a'
+   ;
 
-M : I C T M E M
-  | A
-  ;
+S1 : 'e' S
+   | /* empty */
+   ;
 
-U : I C T S
-  | I C T M E U
-  ;
-
-C : B ;
+E  : 'b'
+   ;
 
 %%
 
 void yyerror(const char *s) {
-  (void)s;
+    (void)s;
     printf("Invalid string\n");
-    exit(0);
+    exit(1);
 }
 
-int main() {
+int main(void) {
     printf("Enter string: ");
-    yyparse();
-    printf("Valid string\n");
+    if (yyparse() == 0) {
+        printf("Valid string\n");
+    }
     return 0;
 }
