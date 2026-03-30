@@ -1,36 +1,39 @@
 #include <iostream>
 #include <fstream>
 #include <cctype>
-#include <cstring>
+#include <unordered_set>
+#include <vector>
+
 using namespace std;
 
-string keywords[] = {
+const unordered_set<string> kKeywords = {
     "int", "char", "float", "double", "return", "void", "long",
     "struct", "if", "else", "while", "for"
 };
 
-bool isKeyword(string s) {
-    for (int i = 0; i < 12; i++)
-        if (s == keywords[i])
-            return true;
-    return false;
+bool isKeyword(const string &s) {
+    return kKeywords.find(s) != kKeywords.end();
 }
 
 bool isOperator(char c) {
-    return c=='+' || c=='-' || c=='*' || c=='/' || c=='=' || c=='<'
-           || c=='>' || c=='%';
+    return c == '+' || c == '-' || c == '*' || c == '/' || c == '=' || c == '<' ||
+           c == '>' || c == '%';
 }
 
 bool isPunctuation(char c) {
-    return c=='(' || c==')' || c=='{' || c=='}' || c==',' || c==';';
+    return c == '(' || c == ')' || c == '{' || c == '}' || c == ',' || c == ';';
 }
 
 int main() {
     ifstream fin("input.c");
+    if (!fin.is_open()) {
+        cout << "Could not open input.c" << endl;
+        return 1;
+    }
+
     char ch;
     string token;
-    string symbolTable[50];
-    int symCount = 0;
+    vector<string> symbolTable;
     int line = 1;
 
     cout << "\nTOKENS\n";
@@ -65,7 +68,7 @@ int main() {
         // Identifier or Keyword
         if (isalpha(ch)) {
             token = ch;
-            while (isalnum(fin.peek())) {
+            while (isalnum(fin.peek()) || fin.peek() == '_') {
                 fin.get(ch);
                 token += ch;
             }
@@ -74,19 +77,27 @@ int main() {
                 cout << "Keyword: " << token << endl;
             } else {
                 cout << "Identifier: " << token << endl;
-                symbolTable[symCount++] = token;
+                symbolTable.push_back(token);
             }
         }
 
         // Constant
         else if (isdigit(ch)) {
             token = ch;
-            while (isalnum(fin.peek())) {
+            while (isalnum(fin.peek()) || fin.peek() == '_') {
                 fin.get(ch);
                 token += ch;
             }
 
-            if (isalpha(token[token.length()-1])) {
+            bool hasAlpha = false;
+            for (char c : token) {
+                if (isalpha(static_cast<unsigned char>(c)) || c == '_') {
+                    hasAlpha = true;
+                    break;
+                }
+            }
+
+            if (hasAlpha) {
                 cout << "LEXICAL ERROR\nLine " << line
                      << " : " << token << " invalid lexeme\n";
             } else {
@@ -106,8 +117,9 @@ int main() {
     }
 
     cout << "\nSYMBOL TABLE ENTRIES\n";
-    for (int i = 0; i < symCount; i++)
-        cout << i+1 << ") " << symbolTable[i] << endl;
+    for (size_t i = 0; i < symbolTable.size(); i++) {
+        cout << i + 1 << ") " << symbolTable[i] << endl;
+    }
 
     fin.close();
     return 0;

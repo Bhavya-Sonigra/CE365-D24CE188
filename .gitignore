@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# Editors
+.vscode/*.log
+
+# Build artifacts
+*.o
+*.out
+*.exe
+
+# Local binaries from practicals
+practical1
+practical2
+practical3
+prac
+lexer
+
+# Flex/Bison generated sources
+lex.yy.c
+y.tab.c
+y.tab.h
